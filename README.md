@@ -20,7 +20,8 @@ A shallow neural network (NN) is composed of layers. An <i>input layer</i>, spec
 
 ## Problems
 One problem I ran into was the inputs to each layer were becoming increasingly large, eventually reaching $e^9$ near the end. This was because even though I had initialised my weights between 0 and 1, there was nothing stopping the inputs reaching incredibly large values due to the ReLU activation function not clamping any values.
-I solve this using He initialisation, we initialise the weights according to a gaussian distribution with $\mu = 0$ and $\sigma = \sqrt{2/n}$ where $n$ is the number of input units, this works especially well for ReLU activation functions. This changed our code for the input weights, for example, to ```params = {"W_inputs": np.random.uniform(0, 1, size=(num_inputs, HL_structure[0]))}``` to ```params = {"W``` 
+I solve this using He initialisation, we initialise the weights according to a gaussian distribution with $\mu = 0$ and $\sigma = \sqrt{2/n}$ where $n$ is the number of input units, this works especially well for ReLU activation functions. This changed our code for the input weights, for example, to ```params = {"W_inputs": np.random.uniform(0, 1, size=(num_inputs, HL_structure[0]))}``` to ```params = {"W_inputs": np.random.normal(0, 2/num_inputs, size=(num_inputs, HL_structure[0]))}``` 
+
 
  
 
