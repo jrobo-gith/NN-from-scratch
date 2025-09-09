@@ -32,7 +32,20 @@ In this project, we build a neural network from scratch, only using numpy to com
 
 ## Problems
 One problem I ran into was the inputs to each layer were becoming increasingly large, eventually reaching $e^9$ near the end. This was because even though I had initialised my weights between 0 and 1, there was nothing stopping the inputs reaching incredibly large values due to the ReLU activation function not clamping any values.
-I solve this using He initialisation, we initialise the weights according to a gaussian distribution with $\mu = 0$ and $\sigma = \sqrt{2/n}$ where $n$ is the number of input units, this works especially well for ReLU activation functions. This changed our code for the input weights, for example, to ```params = {"W_inputs": np.random.uniform(0, 1, size=(num_inputs, HL_structure[0]))}``` to ```params = {"W_inputs": np.random.normal(0, 2/num_inputs, size=(num_inputs, HL_structure[0]))}``` 
+I solve this using He initialisation, we initialise the weights according to a gaussian distribution with $\mu = 0$ and $\sigma = \sqrt{2/n}$ where $n$ is the number of input units, this works especially well for ReLU activation functions. This changed our code for the input weights, for example, to ```params = {"W_inputs": np.random.uniform(0, 1, size=(num_inputs, HL_structure[0]))}``` to ```params = {"W_inputs": np.random.normal(0, 2/num_inputs, size=(num_inputs, HL_structure[0]))}```
+
+## Final adjustments
+After some bug fixing, I found a few small problems that were causing the NN not to improve with each training image. 
+* The He initialisation was wrong, a silly mistake where the range was within ```2/HL_structure``` and not within ```np.sqrt(2/HL_structure)```, causing incorrect weight initialisation which propagated throughout the NN.
+* The ReLU function was being applied to the output layer as well as the hidden layers.
+* The NN seemed to perform better when the training and test rgb values were normalized between 0-1 and not 0-255.
+* The learning rate was also turned down to an acceptable level.
+
+With these improvements, we were able to achieve an accuracy of 95.25% on the MNIST test set.
+
+## Remaining problems
+
+Looking at the error plot near the end of the .ipynb notebook, NN performance is still quite volatile despite achieving high accuracy. This may be something to improve on later. 
 
 
  
